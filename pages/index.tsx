@@ -21,8 +21,8 @@ export default function Home({ data } : { data: FinanceDataType }) {
             <Grid xs={12} item ml={0.5}>Balance Verification</Grid>
 
             {data.creditCards.map(cc => (
-              <Grid item xs={6}>
-                <CreditCardProgress key={cc.name} creditCard={cc} />
+              <Grid item xs={6} key={cc.name}>
+                <CreditCardProgress creditCard={cc} />
               </Grid>
             ))}
         </Grid>
