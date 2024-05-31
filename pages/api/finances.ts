@@ -3,9 +3,11 @@ import { JWT } from 'google-auth-library';
 import { GoogleSpreadsheet, GoogleSpreadsheetRow } from 'google-spreadsheet';
 import { BalanceRowType, CreditCardRowType, FinanceDataType } from '@/types/finance';
 
+const PRIVATE_KEY = Buffer.from(process.env.GOOGLE_PRIVATE_KEY || '', 'base64').toString('utf8');
+
 const jwt = new JWT({
   email: process.env.GOOGLE_EMAIL,
-  key: process.env.GOOGLE_PRIVATE_KEY,
+  key: PRIVATE_KEY.split(String.raw`\n`).join('\n'),
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
