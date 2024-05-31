@@ -16,24 +16,34 @@ export const getServerSideProps = (async () => {
 export default function Home({ data } : { data: FinanceDataType }) {
   return (
     <Container>
-      <Stack spacing={1} py={2}>
-        {data.creditCards.map(cc => <CreditCardProgress key={cc.name} creditCard={cc} />)}
+      <Stack height="100vh" justifyContent="center" spacing={3}>
+        <Grid container rowGap={1}>
+            <Grid xs={12} item ml={0.5}>Balance Verification</Grid>
+
+            {data.creditCards.map(cc => (
+              <Grid item xs={6}>
+                <CreditCardProgress key={cc.name} creditCard={cc} />
+              </Grid>
+            ))}
+        </Grid>
+
+        <Grid container>
+          <Grid xs={12} item ml={0.5} mb={1}>Minimum Balance</Grid>
+
+          <Grid item xs={4} alignItems="center">
+            <MinimumBalance name="Joint" balances={data.joint} />
+          </Grid>
+
+          <Grid item xs={4} alignItems="center">
+            <MinimumBalance name="Personal" balances={data.personal} />
+          </Grid>
+
+          <Grid item xs={4} alignItems="center">
+            <MinimumBalance name="Mother" balances={data.mother} />
+          </Grid>
+
+        </Grid>
       </Stack>
-
-      <Grid container>
-        <Grid item xs={4} alignItems="center">
-          <MinimumBalance name="Joint" balances={data.joint} />
-        </Grid>
-
-        <Grid item xs={4} alignItems="center">
-          <MinimumBalance name="Personal" balances={data.personal} />
-        </Grid>
-
-        <Grid item xs={4} alignItems="center">
-          <MinimumBalance name="Mother" balances={data.mother} />
-        </Grid>
-
-      </Grid>
     </Container>
   );
 }

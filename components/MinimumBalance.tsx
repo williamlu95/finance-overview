@@ -1,6 +1,6 @@
 import { BalanceRowType } from "@/types/finance";
 import { formatFromDollars, formatToDollars } from "@/utils/currency-formatter";
-import { Stack, Typography } from "@mui/material";
+import { Paper, Stack, Typography } from "@mui/material";
 
 type Props = {
   name: string;
@@ -12,8 +12,8 @@ export default function MinimumBalance({ name, balances }: Props): JSX.Element {
   const color = minBalance >= 0 ? 'green' : 'error';
 
   return (
-    <>
-      <Stack alignItems="center">
+    <Paper sx={{ mx: 0.5 }}>
+      <Stack alignItems="center" justifyContent="center" py={1}>
         <Typography variant="body1">
           {name}
         </Typography>
@@ -21,6 +21,6 @@ export default function MinimumBalance({ name, balances }: Props): JSX.Element {
           {formatToDollars(minBalance)}
         </Typography>
       </Stack>
-    </>
+    </Paper>
   );
 }

@@ -1,23 +1,27 @@
 import { CreditCardRowType } from "@/types/finance";
-import { LinearProgress, Stack, Typography } from "@mui/material";
+import { formatDifference, formatName } from "@/utils/name-formatter";
+import { Alert, AlertTitle, Typography } from "@mui/material";
 
 type Props = {
   creditCard: CreditCardRowType;
 };
 
 export default function CreditCardProgress({ creditCard }: Props): JSX.Element { 
-  const color = creditCard.difference === "$0.00" ? 'success' : 'warning';
+  const severity = creditCard.difference === "$0.00" ? 'success' : 'warning';
+
   return (
     <>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="body1">
-          {creditCard.name}
-        </Typography>
-        <Typography variant="body1">
-          {creditCard.difference}
-        </Typography>
-      </Stack>
-      <LinearProgress variant="determinate" value={100} color={color} />
+        <Alert
+          icon={false}
+          severity={severity}
+          variant="filled"
+          sx={{ mx: 0.5, color: "#fff" }}
+        >
+          <AlertTitle noWrap sx={{ mb: 0 }}>
+            {formatName(creditCard.name)}
+          </AlertTitle>
+          {formatDifference(creditCard.difference)}
+        </Alert>
     </>
   );
 }
