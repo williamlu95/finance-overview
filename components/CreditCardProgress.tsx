@@ -7,15 +7,20 @@ type Props = {
 };
 
 export default function CreditCardProgress({ creditCard }: Props): JSX.Element { 
-  const severity = creditCard.difference === "$0.00" ? '#395D42' : '#BF8211';
-// #AB161A for negative balance
+  const getSeverity = () => {
+    if (creditCard.difference === '$0.00') return '#395D42';
+    
+    if (creditCard.difference.startsWith('-')) return '#AB161A';
+
+    return '#BF8211';
+  }
 
   return (
     <>
         <Alert
           icon={false}
           variant="filled"
-          sx={{ mx: 0.5, color: "#fff", bgcolor: severity }}
+          sx={{ mx: 0.5, color: "#fff", bgcolor: getSeverity() }}
         >
           <AlertTitle noWrap sx={{ mb: 0 }}>
             {formatName(creditCard.name)}
