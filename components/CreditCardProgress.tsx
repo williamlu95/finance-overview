@@ -10,7 +10,7 @@ export default function CreditCardProgress({ creditCard }: Props): JSX.Element {
   const getSeverity = () => {
     if (creditCard.difference === '$0.00') return '#395D42';
     
-    if (creditCard.difference.startsWith('-')) return '#AB161A';
+    if (creditCard.difference.startsWith('-') && creditCard.name !== 'Chase Checking') return '#AB161A';
 
     return '#BF8211';
   }
