@@ -18,7 +18,9 @@ const SHEETS: Record<string, string> = {
   PERSONAL: 'Personal Balance',
 };
 
-const getCheckingOverall = (overall: string): string => {
+const getDifference = (name: string, overall: string): string => {
+  if (name !== 'Chase Checking') return overall;
+
   if (overall.startsWith('-')) return overall.replace('-', '');
 
   if (overall !== '$0.00') return `-${overall}`;
@@ -31,10 +33,7 @@ const formatBalanceRows = (rows: GoogleSpreadsheetRow[]): BalanceRowType[] =>
     name: row.get('Name'),
     date: row.get('Date'),
     amount: row.get('Amount'),
-    overall:
-      row.get('Name') === 'Chase Checking'
-        ? getCheckingOverall(row.get('Overall'))
-        : row.get('Overall'),
+    overall: row.get('Overall'),
   }));
 
 const formatCreditCardRows = (rows: GoogleSpreadsheetRow[]): CreditCardRowType[] =>
@@ -42,7 +41,7 @@ const formatCreditCardRows = (rows: GoogleSpreadsheetRow[]): CreditCardRowType[]
     name: row.get('Name'),
     expectedBalance: row.get('Expected Balance'),
     actualBalance: row.get('Actual Balance'),
-    difference: row.get('Difference'),
+    difference: getDifference(row.get('Name'), row.get('Difference')),
   }));
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<FinanceDataType>) {
