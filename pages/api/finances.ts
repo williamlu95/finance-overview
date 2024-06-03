@@ -18,12 +18,23 @@ const SHEETS: Record<string, string> = {
   PERSONAL: 'Personal Balance',
 };
 
+const getCheckingOverall = (overall: string): string => {
+  if (overall.startsWith('-')) return overall.replace('-', '');
+
+  if (overall !== '$0.00') return `-${overall}`;
+
+  return overall;
+};
+
 const formatBalanceRows = (rows: GoogleSpreadsheetRow[]): BalanceRowType[] =>
   rows.map((row) => ({
     name: row.get('Name'),
     date: row.get('Date'),
     amount: row.get('Amount'),
-    overall: row.get('Overall'),
+    overall:
+      row.get('Name') === 'Chase Checking'
+        ? getCheckingOverall(row.get('Overall'))
+        : row.get('Overall'),
   }));
 
 const formatCreditCardRows = (rows: GoogleSpreadsheetRow[]): CreditCardRowType[] =>

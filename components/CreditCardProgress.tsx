@@ -1,6 +1,6 @@
 import { CreditCardRowType } from "@/types/finance";
 import { formatDifference, formatName } from "@/utils/name-formatter";
-import { Alert, AlertTitle, Typography } from "@mui/material";
+import { Alert, AlertTitle } from "@mui/material";
 
 type Props = {
   creditCard: CreditCardRowType;
@@ -10,7 +10,7 @@ export default function CreditCardProgress({ creditCard }: Props): JSX.Element {
   const getSeverity = () => {
     if (creditCard.difference === '$0.00') return '#395D42';
     
-    if (creditCard.difference.startsWith('-') && creditCard.name !== 'Chase Checking') return '#AB161A';
+    if (creditCard.difference.startsWith('-')) return '#AB161A';
 
     return '#BF8211';
   }
