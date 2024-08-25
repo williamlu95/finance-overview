@@ -30,17 +30,22 @@ export default function Home({ data } : { data: FinanceDataType }) {
         <Grid container>
           <Grid xs={12} item ml={0.5} mb={1}>Minimum Balance</Grid>
 
-          <Grid item xs={4} alignItems="center">
+          <Grid item xs={3} alignItems="center">
             <MinimumBalance name="Joint" balances={data.joint} />
           </Grid>
 
-          <Grid item xs={4} alignItems="center">
+          <Grid item xs={3} alignItems="center">
+            <MinimumBalance name="Food" balances={data.food} />
+          </Grid>
+
+          <Grid item xs={3} alignItems="center">
             <MinimumBalance name="Personal" balances={data.personal} />
           </Grid>
 
-          <Grid item xs={4} alignItems="center">
+          <Grid item xs={3} alignItems="center">
             <MinimumBalance name="Mother" balances={data.mother} />
           </Grid>
+          
 
         </Grid>
       </Stack>

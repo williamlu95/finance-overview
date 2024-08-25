@@ -14,6 +14,7 @@ export type CreditCardRowType = {
 
 export type FinanceDataType = {
   joint: BalanceRowType[];
+  food: BalanceRowType[];
   mother: BalanceRowType[];
   personal: BalanceRowType[];
   creditCards: CreditCardRowType[];
