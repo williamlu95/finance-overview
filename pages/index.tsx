@@ -14,14 +14,16 @@ export const getServerSideProps = (async () => {
 });
 
 export default function Home({ data } : { data: FinanceDataType }) {
+  const isOddCount = data.creditCards.length % 2 !== 0;
+
   return (
     <Container>
       <Stack height="100vh" justifyContent="center" spacing={3}>
         <Grid container rowGap={1}>
             <Grid xs={12} item ml={0.5}>Balance Verification</Grid>
 
-            {data.creditCards.map(cc => (
-              <Grid item xs={6} key={cc.name}>
+            {data.creditCards.map((cc, index) => (
+              <Grid item xs={index === 0 && isOddCount ? 12 : 6} key={cc.name}>
                 <CreditCardProgress creditCard={cc} />
               </Grid>
             ))}
