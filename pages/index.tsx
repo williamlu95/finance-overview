@@ -24,7 +24,7 @@ export default function Home({ data } : { data: FinanceDataType }) {
 
             {data.creditCards.map((cc, index) => (
               <Grid item xs={index === 0 && isOddCount ? 12 : 6} key={cc.name}>
-                <CreditCardProgress creditCard={cc} />
+                <CreditCardProgress creditCard={cc} sx={index === 0 && isOddCount ? { display: 'flex', justifyContent: 'center', textAlign: 'center' } : {}} />
               </Grid>
             ))}
         </Grid>
