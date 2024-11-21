@@ -13,7 +13,7 @@ export default function MinimumBalance({ name, balances }: Props): JSX.Element {
   const color = minBalance >= 0 ? 'green' : 'error';
 
   return (
-    <Paper sx={{ mx: 0.5 }}>
+    <Paper>
       <Stack alignItems="center" py={1}>
         <Typography variant="body1">
           {name} {`(${minDate})`}
