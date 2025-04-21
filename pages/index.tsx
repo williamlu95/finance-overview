@@ -4,8 +4,7 @@ import { CreditCardRowType, FinanceDataType } from "@/types/finance";
 import { Container, Grid, Stack } from "@mui/material";
 import CreditCardProgress from "@/components/CreditCardProgress";
 import MinimumBalance from "@/components/MinimumBalance";
-import { JOINT_CREDIT_CARD, SOCK_DRAWER_CARDS } from "@/constants/credit-card";
-import SockDrawerCard from "@/components/SockDrawerCard";
+import { JOINT_CREDIT_CARD } from "@/constants/credit-card";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +18,6 @@ export default function Home({ data } : { data: FinanceDataType }) {
   const jointCards: CreditCardRowType[] = [...data.creditCards.filter(cc => Object.values(JOINT_CREDIT_CARD).includes(cc.name)), data.food];
   const hasOneExtra = personalCards.length % 3 === 1;
   const hasTwoExtra = personalCards.length % 3 === 2;
-  const sockDrawerCards = data.personal.filter(cc => Object.values(SOCK_DRAWER_CARDS).includes(cc.name));
 
   const getColumnLength = (index: number) => {
     if (hasOneExtra && index === 0) {
@@ -70,18 +68,6 @@ export default function Home({ data } : { data: FinanceDataType }) {
           <Grid item xs={6} alignItems="center">
             <MinimumBalance name="Mother" balances={data.mother} />
           </Grid>
-          
-
-        </Grid>
-
-        <Grid container rowGap={1}>
-          <Grid xs={12} item ml={0.5} mb={1}>Sock Drawer Cards</Grid>
-
-          {sockDrawerCards.map((cc) => (
-              <Grid item xs={4} key={cc.name}>
-                <SockDrawerCard balance={cc} />
-              </Grid>
-            ))}
         </Grid>
       </Stack>
     </Container>
