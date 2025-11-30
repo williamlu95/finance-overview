@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { JWT } from 'google-auth-library';
 import { GoogleSpreadsheet, GoogleSpreadsheetRow } from 'google-spreadsheet';
-import { BalanceRowType, CreditCardRowType, FinanceDataType } from '@/types/finance';
+import { BalanceRowType, CreditCardRowType, FinanceDataType, SyncRowType } from '@/types/finance';
 
 const PRIVATE_KEY = Buffer.from(process.env.GOOGLE_PRIVATE_KEY || '', 'base64').toString('utf8');
 
@@ -16,6 +16,7 @@ const SHEETS: Record<string, string> = {
   MOTHER: "Mother's Balance",
   WILLIAM: "William's Balance",
   PERSONAL: 'Personal Balance',
+  SYNC: 'Last Sync',
 };
 
 const getDifference = (name: string, overall: string): string => {
@@ -55,6 +56,12 @@ const formatCreditCardRows = (rows: GoogleSpreadsheetRow[]): CreditCardRowType[]
     difference: getDifference(row.get('Name'), row.get('Difference')),
   }));
 
+const formatSyncRows = (rows: GoogleSpreadsheetRow[]): SyncRowType[] =>
+  rows.map((row) => ({
+    source: row.get('Source'),
+    lastSyncedAt: row.get('Last Sync'),
+  }));
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<FinanceDataType>) {
   const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID ?? '', jwt);
   await doc.loadInfo();
@@ -71,11 +78,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const personalSheet = doc.sheetsByTitle[SHEETS.PERSONAL];
   const personalRows = await personalSheet.getRows();
 
+
+  const syncSheet = doc.sheetsByTitle[SHEETS.SYNC];
+  const syncRows = await syncSheet.getRows();
+
   res.status(200).json({
     joint: formatBalanceRows(jointRows),
     food: formatFoodBalanceRows(jointRows),
     mother: formatBalanceRows(motherRows),
     personal: formatBalanceRows(personalRows),
     creditCards: formatCreditCardRows(williamRows),
+    syncs: formatSyncRows(syncRows)
   });
 }

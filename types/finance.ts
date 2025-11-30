@@ -12,10 +12,16 @@ export type CreditCardRowType = {
   difference: string;
 };
 
+export type SyncRowType = {
+  source: string;
+  lastSyncedAt: string;
+}
+
 export type FinanceDataType = {
   joint: BalanceRowType[];
   mother: BalanceRowType[];
   personal: BalanceRowType[];
   food: CreditCardRowType;
   creditCards: CreditCardRowType[];
+  syncs: SyncRowType[];
 };

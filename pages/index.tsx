@@ -5,6 +5,7 @@ import { Container, Grid, Stack } from "@mui/material";
 import CreditCardProgress from "@/components/CreditCardProgress";
 import MinimumBalance from "@/components/MinimumBalance";
 import { JOINT_CREDIT_CARD } from "@/constants/credit-card";
+import LastSyncedAts from "@/components/LastSyncedAts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,13 +14,10 @@ export const getServerSideProps = (async () => {
   return { props: { data: res.data } }
 });
 
-export default function Home({ data } : { data: FinanceDataType }) {
-  const personalCards: CreditCardRowType[] = data.creditCards.filter(cc => !Object.values(JOINT_CREDIT_CARD).includes(cc.name));
-  const jointCards: CreditCardRowType[] = [...data.creditCards.filter(cc => Object.values(JOINT_CREDIT_CARD).includes(cc.name)), data.food];
-  const hasOneExtra = personalCards.length % 3 === 1;
-  const hasTwoExtra = personalCards.length % 3 === 2;
+const getColumnLength = (data: unknown[], index: number) => {
+  const hasOneExtra = data.length % 3 === 1;
+  const hasTwoExtra = data.length % 3 === 2;
 
-  const getColumnLength = (index: number) => {
     if (hasOneExtra && index === 0) {
       return 12;
     }
@@ -29,7 +27,14 @@ export default function Home({ data } : { data: FinanceDataType }) {
     }
 
     return 4;
-  }
+}
+
+
+export default function Home({ data } : { data: FinanceDataType }) {
+  const personalCards: CreditCardRowType[] = data.creditCards.filter(cc => !Object.values(JOINT_CREDIT_CARD).includes(cc.name));
+  const jointCards: CreditCardRowType[] = [...data.creditCards.filter(cc => Object.values(JOINT_CREDIT_CARD).includes(cc.name)), data.food];
+
+
 
   return (
     <Container>
@@ -38,7 +43,7 @@ export default function Home({ data } : { data: FinanceDataType }) {
             <Grid xs={12} item ml={0.5}>Personal</Grid>
 
             {personalCards.map((cc, index) => (
-              <Grid item xs={getColumnLength(index)} key={cc.name}>
+              <Grid item xs={getColumnLength(personalCards, index)} key={cc.name}>
                 <CreditCardProgress creditCard={cc} />
               </Grid>
             ))}
@@ -68,6 +73,16 @@ export default function Home({ data } : { data: FinanceDataType }) {
           <Grid item xs={6} alignItems="center">
             <MinimumBalance name="Mother" balances={data.mother} />
           </Grid>
+        </Grid>
+
+        <Grid container rowGap={1}>
+            <Grid xs={12} item ml={0.5}>Last Synced At</Grid>
+
+            {data.syncs.map((sync, index) => (
+              <Grid item xs={getColumnLength(data.syncs,index)} key={sync.source}>
+                <LastSyncedAts sync={sync} />
+              </Grid>
+            ))}
         </Grid>
       </Stack>
     </Container>
