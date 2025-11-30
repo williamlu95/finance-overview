@@ -14,7 +14,7 @@ export default function LastSyncedAts({ sync, sx = {} }: Props): JSX.Element {
           icon={false}
           variant="filled"
           color="info"
-          sx={{ mx: 0.5, color: "#fff", ...sx }}
+          sx={{ mx: 0.5, color: "#fff", bgcolor: '#00468B', ...sx }}
         >
           <AlertTitle noWrap sx={{ mb: 0 }}>
             {formatSyncName(sync.source)}
