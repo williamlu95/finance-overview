@@ -1,6 +1,8 @@
 import { BalanceRowType } from "@/types/finance";
-import { Button, Modal, Stack, TextField, Typography, useTheme } from "@mui/material";
-import { ChangeEvent, useEffect, useState } from "react";
+import { formatFromDollars, formatToDollars } from "@/utils/currency-formatter";
+import { Button, Drawer, Stack, TextField, Typography, useTheme } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { NumberFormatBase, NumberFormatValues } from "react-number-format";
 
 type Props = {
     open: boolean;
@@ -9,25 +11,25 @@ type Props = {
     onClose: () => void;
 }
 
-export default function UpdateAmountModal({ open, transaction, onClose, onAmountSubmit }: Props) {
+export default function UpdateAmountDrawer({ open, transaction, onClose, onAmountSubmit }: Props) {
   const theme = useTheme();
-  const [amount, setAmount] = useState(transaction?.amount || '$0.00');
+  const [amount, setAmount] = useState(0);
 
   useEffect(() => {
-    setAmount(transaction?.amount || '$0.00');
-  }, [transaction])
+    setAmount(0);
+  }, [transaction]);
   
-  const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAmount(e.target.value);
+  const handleAmountChange = (values: NumberFormatValues) => {
+    setAmount(Number(values.value));
   }
 
   const handleAmountSubmit = () => {
-    onAmountSubmit(amount);
+    onAmountSubmit(formatToDollars(amount / 100));
     onClose();
   };
 
   return (
-    <Modal open={open} onClose={onClose} hideBackdrop>
+    <Drawer open={open} onClose={onClose} anchor="bottom">
       <Stack justifyContent="end" height="100%">
         <Stack p={2} spacing={2} bgcolor={theme.palette.background.default}>
           <Stack>
@@ -35,7 +37,7 @@ export default function UpdateAmountModal({ open, transaction, onClose, onAmount
             <Typography>{transaction?.date}</Typography>
           </Stack>
 
-          <TextField value={amount} onChange={handleAmountChange}/>
+          <NumberFormatBase value={amount} customInput={TextField} onValueChange={handleAmountChange} format={(value) => formatToDollars(Number(value) / 100)} />
 
           <Stack direction="row" spacing={1}>
             <Button variant="contained" onClick={handleAmountSubmit}>Update</Button>
@@ -43,6 +45,6 @@ export default function UpdateAmountModal({ open, transaction, onClose, onAmount
           </Stack>
         </Stack>
       </Stack>
-    </Modal>
+    </Drawer>
   );
 }

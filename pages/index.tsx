@@ -40,46 +40,46 @@ export default function Home({ data } : { data: FinanceDataType }) {
     <Container>
       <Stack height="100vh" justifyContent="center" spacing={3}>
         <Grid container rowGap={1}>
-            <Grid xs={12} item ml={0.5}>Personal</Grid>
+            <Grid size={12} ml={0.5}>Personal</Grid>
 
             {personalCards.map((cc, index) => (
-              <Grid item xs={getColumnLength(personalCards, index)} key={cc.name}>
+              <Grid size={getColumnLength(personalCards, index)} key={cc.name}>
                 <CreditCardProgress creditCard={cc} />
               </Grid>
             ))}
         </Grid>
 
         <Grid container rowGap={1}>
-            <Grid xs={12} item ml={0.5}>Joint</Grid>
+            <Grid size={12} ml={0.5}>Joint</Grid>
 
             {jointCards.map((cc) => (
-              <Grid item xs={4} key={cc.name}>
+              <Grid size={4} key={cc.name}>
                 <CreditCardProgress creditCard={cc} />
               </Grid>
             ))}
         </Grid>
 
         <Grid container>
-          <Grid xs={12} item ml={0.5} mb={1}>Minimum</Grid>
+          <Grid size={12} ml={0.5} mb={1}>Minimum</Grid>
 
-          <Grid item xs={12} alignItems="center">
+          <Grid size={12} alignItems="center">
             <MinimumBalance name="Joint" balances={data.joint} />
           </Grid>
 
-          <Grid item xs={6} alignItems="center">
+          <Grid size={6} alignItems="center">
             <MinimumBalance name="Personal" balances={data.personal} />
           </Grid>
 
-          <Grid item xs={6} alignItems="center">
+          <Grid size={6} alignItems="center">
             <MinimumBalance name="Mother" balances={data.mother} />
           </Grid>
         </Grid>
 
         <Grid container rowGap={1}>
-            <Grid xs={12} item ml={0.5}>Last Synced At</Grid>
+            <Grid size={12} ml={0.5}>Last Synced At</Grid>
 
             {data.syncs.map((sync, index) => (
-              <Grid item xs={getColumnLength(data.syncs,index)} key={sync.source}>
+              <Grid size={getColumnLength(data.syncs,index)} key={sync.source}>
                 <LastSyncedAts sync={sync} />
               </Grid>
             ))}

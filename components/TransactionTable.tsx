@@ -1,7 +1,7 @@
 import { BalanceRowType } from "@/types/finance";
 import { Button, Divider, Grid, GridProps, Typography, useTheme } from "@mui/material";
 import { Fragment, useState } from "react";
-import UpdateAmountModal from "./UpdateAmountModal";
+import UpdateAmountDrawer from "./UpdateAmountDrawer";
 
 type Props = {
   minAmount: string;
@@ -13,23 +13,19 @@ const DIVIDER_COLOR = 'rgba(255, 255, 255, 0.12)';
 
 const TABLE_CONFIG: Record<string, GridProps> = {
   name: {
-    item: true,
-    xs: 3,
+    size: 3,
     sx: { borderRight: `1px solid ${DIVIDER_COLOR}` }
   },
   date: {
-    item: true,
-    xs: 3,
+    size: 3,
     sx: { borderRight: `1px solid ${DIVIDER_COLOR}` }
   },
   amount: {
-    item: true,
-    xs: 3,
+    size: 3,
     sx: { borderRight: `1px solid ${DIVIDER_COLOR}` }
   },
   overall: {
-    item: true,
-    xs: 3,
+    size: 3,
   },
 };
 
@@ -41,14 +37,14 @@ export default function TransactionTable({ transactions, minAmount, onAmountChan
   const renderHeaderCell = (text: string) => <Typography p={1} fontWeight="bold" fontSize={14}>{text}</Typography>
 
   const renderHeader = () => (
-    <Grid item xs={12} mt={1} position="sticky" top={0} bgcolor={theme.palette.grey[700]} zIndex={1}>
+    <Grid size={12} mt={1} position="sticky" top={0} bgcolor={theme.palette.grey[700]} zIndex={1}>
       <Grid container>
         <Grid {...TABLE_CONFIG.name}>{renderHeaderCell('Name')}</Grid>
         <Grid {...TABLE_CONFIG.date}>{renderHeaderCell('Date')}</Grid>
         <Grid {...TABLE_CONFIG.amount}>{renderHeaderCell('Amount')}</Grid>
         <Grid {...TABLE_CONFIG.overall}>{renderHeaderCell('Overall')}</Grid>
 
-        <Grid item xs={12}><Divider /></Grid>
+        <Grid size={12}><Divider /></Grid>
       </Grid>
     </Grid>
   );
@@ -78,7 +74,7 @@ export default function TransactionTable({ transactions, minAmount, onAmountChan
         </Button>
       </Grid>
       <Grid id={row.overall} {...TABLE_CONFIG.overall}>{renderRowCell(row.overall, getOverallColor(row.overall))}</Grid>
-      <Grid item xs={12}><Divider /></Grid>
+      <Grid size={12}><Divider /></Grid>
     </Fragment>
   );
 
@@ -92,7 +88,7 @@ export default function TransactionTable({ transactions, minAmount, onAmountChan
       {renderHeader()}
       {transactions.map(renderRow)}
 
-      <UpdateAmountModal 
+      <UpdateAmountDrawer 
         open={transactionIndex !== null} 
         transaction={transactionIndex === null ? null : transactions[transactionIndex]} 
         onAmountSubmit={handleAmountSubmit} 
