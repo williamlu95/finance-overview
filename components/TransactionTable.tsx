@@ -1,10 +1,12 @@
 import { BalanceRowType } from "@/types/finance";
-import { Divider, Grid, GridProps, Typography, useTheme } from "@mui/material";
-import { Fragment } from "react";
+import { Button, Divider, Grid, GridProps, Typography, useTheme } from "@mui/material";
+import { Fragment, useState } from "react";
+import UpdateAmountModal from "./UpdateAmountModal";
 
 type Props = {
   minAmount: string;
-  balances: BalanceRowType[];
+  transactions: BalanceRowType[];
+  onAmountChange: (index: number, amount: string) => void
 };
 
 const DIVIDER_COLOR = 'rgba(255, 255, 255, 0.12)';
@@ -32,13 +34,14 @@ const TABLE_CONFIG: Record<string, GridProps> = {
 };
 
 
-export default function TransactionTable({ balances, minAmount }: Props): React.ReactElement { 
-  const theme = useTheme();   
+export default function TransactionTable({ transactions, minAmount, onAmountChange }: Props): React.ReactElement { 
+  const theme = useTheme();  
+  const [transactionIndex, setTransactionIndex] = useState<number | null>(null);
 
   const renderHeaderCell = (text: string) => <Typography p={1} fontWeight="bold" fontSize={14}>{text}</Typography>
 
   const renderHeader = () => (
-    <Grid item xs={12} mt={1} position="sticky" top={0} bgcolor={theme.palette.grey[700]}>
+    <Grid item xs={12} mt={1} position="sticky" top={0} bgcolor={theme.palette.grey[700]} zIndex={1}>
       <Grid container>
         <Grid {...TABLE_CONFIG.name}>{renderHeaderCell('Name')}</Grid>
         <Grid {...TABLE_CONFIG.date}>{renderHeaderCell('Date')}</Grid>
@@ -53,7 +56,7 @@ export default function TransactionTable({ balances, minAmount }: Props): React.
   const renderRowCell = (text: string, color?: string) => <Typography p={1} fontSize={14} color={color}>{text}</Typography>
 
   const getAmountColor = (amount: string) => {
-    if (amount === '$0.00') return;
+    if (amount === '$0.00') return theme.palette.common.white;
 
     if (amount.startsWith('-')) return '#FF6962';
 
@@ -65,21 +68,35 @@ export default function TransactionTable({ balances, minAmount }: Props): React.
     return theme.palette.info.light;
   };
 
-  const renderRow = (row: BalanceRowType) => (
+  const renderRow = (row: BalanceRowType, index: number) => (
     <Fragment key={Object.values(row).join('')}>
       <Grid {...TABLE_CONFIG.name}>{renderRowCell(row.name)}</Grid>
       <Grid {...TABLE_CONFIG.date}>{renderRowCell(row.date)}</Grid>
-      <Grid {...TABLE_CONFIG.amount}>{renderRowCell(row.amount, getAmountColor(row.amount))}</Grid>
+      <Grid {...TABLE_CONFIG.amount}>
+        <Button onClick={() => setTransactionIndex(index)} sx={{ p: 0, zIndex: 0 }}>
+         {renderRowCell(row.amount, getAmountColor(row.amount))}
+        </Button>
+      </Grid>
       <Grid id={row.overall} {...TABLE_CONFIG.overall}>{renderRowCell(row.overall, getOverallColor(row.overall))}</Grid>
-
       <Grid item xs={12}><Divider /></Grid>
     </Fragment>
   );
 
+  const handleAmountSubmit = (amount: string) => {
+    if (transactionIndex !== null)
+      onAmountChange(transactionIndex, amount);
+  };
+
   return (
     <Grid container overflow="auto">
       {renderHeader()}
-      {balances.map(renderRow)}
+      {transactions.map(renderRow)}
+
+      <UpdateAmountModal 
+        open={transactionIndex !== null} 
+        transaction={transactionIndex === null ? null : transactions[transactionIndex]} 
+        onAmountSubmit={handleAmountSubmit} 
+        onClose={() => setTransactionIndex(null)} />
     </Grid>
   );
 }
