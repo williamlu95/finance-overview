@@ -29,6 +29,11 @@ const getColumnLength = (data: unknown[], index: number) => {
     return 4;
 }
 
+const SYNCED_AT_URL: Record<string, string> = {
+  wallet: 'https://web.budgetbakers.com/dashboard',
+  sofi: 'https://www.sofi.com/',
+  teller: 'http://192.168.0.39:8001/'
+};
 
 export default function Home({ data } : { data: FinanceDataType }) {
   const personalCards: CreditCardRowType[] = data.creditCards.filter(cc => !Object.values(JOINT_CREDIT_CARD).includes(cc.name));
@@ -80,7 +85,7 @@ export default function Home({ data } : { data: FinanceDataType }) {
 
             {data.syncs.map((sync, index) => (
               <Grid size={getColumnLength(data.syncs,index)} key={sync.source}>
-                <LastSyncedAts sync={sync} />
+                <LastSyncedAts sync={sync} url={SYNCED_AT_URL[sync.source]} />
               </Grid>
             ))}
         </Grid>

@@ -1,7 +1,7 @@
 import { BalanceRowType } from "@/types/finance";
-import { formatFromDollars, formatToDollars } from "@/utils/currency-formatter";
+import { formatToDollars } from "@/utils/currency-formatter";
 import { Button, Drawer, Stack, TextField, Typography, useTheme } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { NumberFormatBase, NumberFormatValues } from "react-number-format";
 
 type Props = {
