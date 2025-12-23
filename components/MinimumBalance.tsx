@@ -1,6 +1,8 @@
 import { BalanceRowType } from "@/types/finance";
 import { formatFromDollars, formatToDollars } from "@/utils/currency-formatter";
-import { Paper, Stack, Typography } from "@mui/material";
+import { Button, Paper, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import TransactionDrawer from "./TransactionDrawer";
 
 type Props = {
   name: string;
@@ -8,20 +10,32 @@ type Props = {
 };
 
 export default function MinimumBalance({ name, balances }: Props): JSX.Element { 
+  const [balanceDrawerOpen, setBalanceDrawerOpen] = useState(false);
   const minBalance = Math.min(...balances.map(b => formatFromDollars(b.overall)));
   const minDate = balances.find(b => formatFromDollars(b.overall) === minBalance)?.date;
   const color = minBalance >= 0 ? 'green' : 'error';
 
+  const handleOpenChange = (open: boolean) => setBalanceDrawerOpen(open);
+
+  const handleDrawerOpen = () => setBalanceDrawerOpen(true);
+
   return (
-    <Paper sx={{ mx: 0.5 }}>
-      <Stack alignItems="center" py={1}>
-        <Typography variant="body1">
-          {name} {`(${minDate})`}
-        </Typography>
-        <Typography variant="body1" color={color}>
-          {formatToDollars(minBalance)}
-        </Typography>
-      </Stack>
-    </Paper>
+    <>
+      <Button onClick={handleDrawerOpen} fullWidth sx={{ p: '4px', textTransform: 'unset' }}>
+        <Paper sx={{ width: '100%' }}>
+            <Stack alignItems="center" py={1}>
+              <Typography variant="body1">
+                {name} {`(${minDate})`}
+              </Typography>
+              <Typography variant="body1" color={color}>
+                {formatToDollars(minBalance)}
+              </Typography>
+            </Stack>
+        </Paper>
+      </Button>
+
+
+      <TransactionDrawer name={name} balances={balances} minAmount={formatToDollars(minBalance)} open={balanceDrawerOpen} onOpenChange={handleOpenChange} />
+    </>
   );
 }

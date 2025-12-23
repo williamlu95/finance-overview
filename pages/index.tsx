@@ -59,7 +59,7 @@ export default function Home({ data } : { data: FinanceDataType }) {
             ))}
         </Grid>
 
-        <Grid container rowGap={1}>
+        <Grid container>
           <Grid xs={12} item ml={0.5} mb={1}>Minimum</Grid>
 
           <Grid item xs={12} alignItems="center">
